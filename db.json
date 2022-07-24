@@ -1,0 +1,44 @@
+{
+    "myEventsList" : [
+        {
+          "id": 0,
+          "start": "new Date(2022, 6, 25, 13, 30)",
+          "end": "new Date(2022, 6, 25, 14, 30)",
+          "allDay": false,
+          "title": "Vũ Phan - 0967139958 - Pendding",
+          "colorEvento": "yellow",
+          "status": "P"
+        }    
+    ],
+
+    "turfs": [
+        {
+            "id": 0,
+            "name": "Sân Nam Khánh",
+            "address": "23 Phạm Văn Đồng",
+            "long": "12309123.0214",
+            "lat": "4996.31"
+        },
+        {
+            "id": 1,
+            "name": "Sân Minh Trí",
+            "address": "23 Phạm Văn Đồng",
+            "long": "12309123.0214",
+            "lat": "4996.31"
+        },
+        {
+            "id": 2,
+            "name": "Sân Tản Viên",
+            "address": "23 Phạm Văn Đồng",
+            "long": "12309123.0214",
+            "lat": "4996.31"
+        },
+        {
+            "id": 3,
+            "name": "Sân Sài Gòn",
+            "address": "23 Phạm Văn Đồng",
+            "long": "12309123.0214",
+            "lat": "4996.31"
+        }
+    ]
+}
