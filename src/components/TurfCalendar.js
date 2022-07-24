@@ -93,7 +93,7 @@ const myEventsList = [
 
 ];
 
-export default function Home() {
+export default function TurfCalendar() {
   const clickRef = useRef(null)
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
