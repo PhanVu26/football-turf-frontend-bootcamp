@@ -1,9 +1,9 @@
 {
-    "myEventsList" : [
+    "slots" : [
         {
           "id": 0,
-          "start": "new Date(2022, 6, 25, 13, 30)",
-          "end": "new Date(2022, 6, 25, 14, 30)",
+          "start": "2022-07-26T15:30:00",
+          "end": "2022-07-26T16:30:00",
           "allDay": false,
           "title": "Vũ Phan - 0967139958 - Pendding",
           "colorEvento": "yellow",
