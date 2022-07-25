@@ -14,3 +14,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+* {
+  scroll-behavior: smooth;
+}
+
+#rounded-btn {
+  border-radius: 2rem;
+
+}
