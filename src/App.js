@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar/NavBar";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TurfDetail from "./components/TurfDetails/TurfDetail";
+import MapBox from "./components/MapBox/mapBox";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
         <div className="">
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/turfs/:turfId" element={<TurfDetail  />}></Route>
+            <Route path="/turfs/:turfId" element={<TurfDetail />}></Route>
+            <Route path="/maps" element={<MapBox  />}></Route>
+
             {/* <Route
             path="/cv-builder"
             element={<Register allUsers={allUsers} />}
