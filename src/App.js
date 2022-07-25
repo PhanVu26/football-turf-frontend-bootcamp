@@ -1,9 +1,10 @@
 import './App.css';
 import Home from './components/Home';
+import TurfSchedule from './components/TurfSchedule';
 
 function App() {
   return (
-    <Home></Home>
+    <TurfSchedule></TurfSchedule>
   );
 }
 
