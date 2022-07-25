@@ -15,10 +15,10 @@ const TurfDetail = () => {
   const turf = turfs?.find((turf) => turf.id === Number(turfId));
 
   return (
-    <div>
-      <p>Name: {turf.name}</p>
-      <p>Address: {turf.address}</p>
-      {/* <p>{thisTurf.description}</p> */}
+    <div className="m-4">
+      <h3 className="font-bold text-center text-2xl">Name: {turf.name}</h3>
+      <p className="text-xl">Address: {turf.address}</p>
+
     </div>
   );
 };
