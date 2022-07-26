@@ -11,14 +11,23 @@ export const retrieveTurfs = createAsyncThunk(
   }
 );
 
+
+
 const turfSlice = createSlice({
   name: "turf",
   initialState,
+  reducers: {
+    // add your non-async reducers here
+    login: (state, action) => {
+      state.account = action.payload
+    },
+  },
+  
   extraReducers: {
-
     [retrieveTurfs.fulfilled]: (state, action) => {
       return [...action.payload];
     },
+
   },
 });
 

@@ -19,7 +19,7 @@ export const updateScheduleStatus = createAsyncThunk(
   }
 );
 
-const schedulelice = createSlice({
+const scheduleSlice = createSlice({
   name: "schedule",
   initialState,
   extraReducers: {
@@ -36,5 +36,5 @@ const schedulelice = createSlice({
   },
 });
 
-const { reducer } = schedulelice;
+const { reducer } = scheduleSlice;
 export default reducer;

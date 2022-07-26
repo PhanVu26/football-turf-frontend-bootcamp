@@ -7,12 +7,12 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../assets/images/logo_football_turf.png"
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -127,16 +127,16 @@ const NavBar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <Link to="/" className="py-5 px-10 font-extrabold block">
-        Home
-      </Link>
-      <Link to="/login" className="py-5 px-10 font-extrabold block">
+      <Link to="/login" className="py-5 px-10 font-medium block">
         Login
       </Link>
 
     </Menu>
   );
-
+  const navigate = useNavigate();
+  const handleClickLogo = () => {
+    navigate("/");
+  }
   return (
     <div id="back-to-top-anchor">
       <Box sx={{ flexGrow: 1 }}>
@@ -148,15 +148,18 @@ const NavBar = () => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              onClick = {handleClickLogo}
             >
-              <MenuIcon />
+              <img src={Logo} className="w-12"/>
             </IconButton>
             <Typography
               variant="h6"
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}
-            ></Typography>
+            >
+              FootballTurf
+            </Typography>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -168,10 +171,7 @@ const NavBar = () => {
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Link to="/" className="px-3 font-extrabold">
-                Home
-              </Link>
-              <Link to="/login" className="px-3 font-extrabold">
+              <Link to="/login" className="px-3 font-medium">
                 Login
               </Link>
             </Box>

@@ -12,8 +12,9 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { retrieveSchedules } from '../slices/schedules';
-import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+import TurfService from "../../services/TurfService";
+
 
 moment.locale('en-GB');
 const localizer = momentLocalizer(moment);
@@ -24,14 +25,17 @@ export default function TurfSchedule() {
   const [selectedEvent, setSelectedEvent] = useState({});
   const [status, setStatus] = useState("");
 
-  const myEventsList = useSelector(state => state.schedules.map((schedule) => ({ ...schedule, start: new Date(schedule.start), end: new Date(schedule.end) })));
-  const dispatch = useDispatch();
-  const initFetch = useCallback(() => {
-    dispatch(retrieveSchedules());
-  }, [dispatch])
-  useEffect(() => {
-    initFetch()
-  }, [initFetch])
+  const [schedules, setSchedules] = useState([])
+  let { turfId } = useParams();
+  useEffect(()=>{
+      TurfService.getScheduleByTurfId(turfId).then((response) => {
+          const { data } = response;
+          console.log(data);
+          setSchedules(data);
+      });
+  },[turfId])
+
+  const myEventsList = schedules.map((schedule) => ({ ...schedule, start: new Date(schedule.start), end: new Date(schedule.end) }));
 
   const onSelectEvent = useCallback((calEvent) => {
     window.clearTimeout(clickRef?.current)
@@ -60,7 +64,7 @@ export default function TurfSchedule() {
 
   return (
     <div className="App">
-      <svg data-testid="AccessTimeIcon"></svg>
+      {/* <svg data-testid="AccessTimeIcon"></svg> */}
       <Dialog open={isOpenModal} onClose={handleClose}>
         <DialogTitle>Booking details</DialogTitle>
         <DialogContent>

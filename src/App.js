@@ -1,32 +1,19 @@
 import "./App.css";
-import Home from "./components/Home/Home";
-import NavBar from "./components/NavBar/NavBar";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import TurfDetail from "./components/TurfDetails/TurfDetail";
-import MapBox from "./components/MapBox/mapBox";
+import {LoginPage, HomePage, SchedulePage} from "./pages";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import TurfPage from "./pages/TurfPage";
+
 
 function App() {
   return (
-    <div>
-      <Router>
-        <NavBar />
-        {/* <Toolbar></Toolbar> */}
-        <div className="">
-          <Routes>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/turfs/:turfId" element={<TurfDetail />}></Route>
-            <Route path="/maps" element={<MapBox  />}></Route>
-
-            {/* <Route
-            path="/cv-builder"
-            element={<Register allUsers={allUsers} />}
-          ></Route> */}
-          </Routes>
-        </div>
-        <ScrollToTop />
-      </Router>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/turf/:id" element={<TurfPage />} />
+        <Route path="/schedule/:turfId" element={<SchedulePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
