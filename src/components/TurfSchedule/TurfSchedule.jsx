@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useParams } from 'react-router-dom';
 import TurfService from "../../services/TurfService";
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
 
 
 moment.locale('en-GB');
@@ -35,7 +36,13 @@ export default function TurfSchedule() {
       });
   },[turfId])
 
-  const myEventsList = schedules.map((schedule) => ({ ...schedule, start: new Date(schedule.start), end: new Date(schedule.end) }));
+  const myEventsList = schedules.map((schedule) => (
+    { 
+      ...schedule, 
+      start: new Date(schedule.start), 
+      end: new Date(schedule.end),
+      title: schedule?.customer?.username
+    }));
 
   const onSelectEvent = useCallback((calEvent) => {
     window.clearTimeout(clickRef?.current)
@@ -60,7 +67,6 @@ export default function TurfSchedule() {
   const handleClose = () => {
     setIsOpenModal(false);
   };
-
 
   return (
     <div className="App">
@@ -106,9 +112,8 @@ export default function TurfSchedule() {
         defaultView={'week'}
         defaultDate={new Date()}
         eventPropGetter={(myEventsList) => {
-          const backgroundColor = myEventsList.colorEvento ? myEventsList.colorEvento : 'blue';
-          const color = myEventsList.color ? myEventsList.color : 'black';
-          return { style: { backgroundColor, color } }
+          const backgroundColor = myEventsList.status === 0? 'red' : 'blue';
+          return { style: { backgroundColor } }
         }}
         onSelectEvent={onSelectEvent}
         onDoubleClickEvent={onDoubleClickEvent}
