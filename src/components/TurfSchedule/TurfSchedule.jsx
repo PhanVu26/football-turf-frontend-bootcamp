@@ -24,49 +24,84 @@ export default function TurfSchedule() {
   const clickRef = useRef(null)
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState({});
+  const [schedules, setSchedules] = useState([])
   const [status, setStatus] = useState("");
 
-  const [schedules, setSchedules] = useState([])
   let { turfId } = useParams();
-  useEffect(()=>{
-      TurfService.getScheduleByTurfId(turfId).then((response) => {
-          const { data } = response;
-          console.log(data);
-          setSchedules(data);
-      });
-  },[turfId])
-
-  const myEventsList = schedules.map((schedule) => (
-    { 
-      ...schedule, 
-      start: new Date(schedule.start), 
+  useEffect(() => {
+    TurfService.getScheduleByTurfId(turfId).then((response) => {
+      const { data } = response;
+      setSchedules([...data]);
+    });
+    joinRoom(turfId)
+  }, [turfId])
+  const tmp = [...schedules]
+  const myEventsList = tmp.map((schedule) => (
+    {
+      ...schedule,
+      start: new Date(schedule.start),
       end: new Date(schedule.end),
       title: schedule?.customer?.username
     }));
 
   const onSelectEvent = useCallback((calEvent) => {
     window.clearTimeout(clickRef?.current)
-    console.log(calEvent)
     setIsOpenModal(true)
     setSelectedEvent({ ...calEvent });
-    console.log(selectedEvent)
-    setStatus(selectedEvent.status)
+    setStatus(calEvent.status)
   }, [])
 
-  const onDoubleClickEvent = useCallback((calEvent) => {
-    window.clearTimeout(clickRef?.current)
-    clickRef.current = window.setTimeout(() => {
-      window.alert(buildMessage(calEvent, 'onDoubleClickEvent'))
-    }, 250)
-  }, [])
+
 
   const handleChangeStatus = (event) => {
-
+    setStatus(event.target.value)
   };
 
   const handleClose = () => {
     setIsOpenModal(false);
   };
+
+  const [connection, setConnection] = useState();
+
+  const joinRoom = async (turfId) => {
+    try {
+
+      const connection = new HubConnectionBuilder().withUrl(`${process.env.REACT_APP_BASE_URL}/chatHub`)
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      connection.on("UpdateSchedule", (scheduleResponse) => {
+        TurfService.getScheduleByTurfId(turfId).then((response) => {
+          const { data } = response;
+          console.log(data);
+          setSchedules([...data]);
+        });
+      })
+
+      connection.onclose(e => {
+        setConnection()
+      })
+
+      await connection.start();
+      await connection.invoke('AddToGroupAsync', turfId);
+      setConnection(connection);
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      await connection.invoke('UpdateStatusTurfAsync', 
+      {
+        ScheduleId: selectedEvent.id,
+        Status: status
+      } );
+    } catch (err) {
+      console.error(err)
+    }
+    setIsOpenModal(false);
+  }
 
   return (
     <div className="App">
@@ -89,17 +124,14 @@ export default function TurfSchedule() {
               label="Age"
               onChange={handleChangeStatus}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={"B"}>Booked</MenuItem>
-              <MenuItem value={"P"}>Pending</MenuItem>
+              <MenuItem value={"Booked"}>Booked</MenuItem>
+              <MenuItem value={"Pending"}>Pending</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Update</Button>
+          <Button onClick={handleUpdate}>Update</Button>
           <Button onClick={handleClose}>Delete</Button>
         </DialogActions>
       </Dialog>
@@ -112,11 +144,10 @@ export default function TurfSchedule() {
         defaultView={'week'}
         defaultDate={new Date()}
         eventPropGetter={(myEventsList) => {
-          const backgroundColor = myEventsList.status === 0? 'red' : 'blue';
+          const backgroundColor = myEventsList.status === "Booked" ? 'red' : 'blue';
           return { style: { backgroundColor } }
         }}
         onSelectEvent={onSelectEvent}
-        onDoubleClickEvent={onDoubleClickEvent}
       />
     </div>
   );
