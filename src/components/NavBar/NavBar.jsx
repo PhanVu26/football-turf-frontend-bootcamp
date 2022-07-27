@@ -8,11 +8,13 @@ import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { Select } from "@mui/material/";
 
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/images/logo_football_turf.png"
+import TurfService from "../../services/TurfService";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,8 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const NavBar = () => {
-  // const [isDarkMode, toggleDarkMode] = useDarkMode();
+const NavBar = ({ type, setType, setTurfs, position, searchText, setSearchText }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -66,14 +67,21 @@ const NavBar = () => {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  // const darkModeHandler = () => {
-  //   toggleDarkMode(!isDarkMode)
-  // };
+  const [account, setAccount] = useState({});
+  useEffect(() => {
+    setAccount(window.localStorage.getItem("account"));
+  }, [])
 
-  const handleProfileMenuOpen = (event) => {
-    // setAnchorEl(event.currentTarget);
-    console.log("LOGIN");
-  };
+  const [url, setUrl] = useState("");
+  var tmpUrl = document.URL;
+  useEffect(() => {
+    setUrl(tmpUrl);
+  }, [tmpUrl])
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('account');
+    setAccount(null)
+  }
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -137,6 +145,38 @@ const NavBar = () => {
   const handleClickLogo = () => {
     navigate("/");
   }
+  const handleChangeType = (event) => {
+    const type = event.target.value;
+    const searchDto = {
+      name: searchText,
+      turfType: type === 3 ? null : type,
+      longitude: `${position?.coords?.longitude}`,
+      latitude: `${position?.coords?.latitude}`,
+    }
+
+    TurfService.searchMainTurf(searchDto).then((response) => {
+      const { data } = response;
+      setTurfs(data)
+    });
+
+    setType(type)
+  }
+
+  const handleChangeSearch = (event) => {
+    var tmpSearch = event.target.value
+    const searchDto = {
+      name: tmpSearch,
+      turfType: type === 3 ? null : type,
+      longitude: `${position?.coords?.longitude}`,
+      latitude: `${position?.coords?.latitude}`,
+    }
+
+    TurfService.searchMainTurf(searchDto).then((response) => {
+      const { data } = response;
+      setTurfs(data)
+    });
+    setSearchText(tmpSearch)
+  }
   return (
     <div id="back-to-top-anchor">
       <Box sx={{ flexGrow: 1 }}>
@@ -148,9 +188,9 @@ const NavBar = () => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
-              onClick = {handleClickLogo}
+              onClick={handleClickLogo}
             >
-              <img src={Logo} className="w-12"/>
+              <img src={Logo} className="w-12" />
             </IconButton>
             <Typography
               variant="h6"
@@ -160,20 +200,39 @@ const NavBar = () => {
             >
               FootballTurf
             </Typography>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
+            {url.includes("turf") ? null : (
+              <div className = "flex justify-center items-center">
+                <Search
+                  onChange={handleChangeSearch}>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+
+                <Select
+                  className = "h-10 border-1"
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={type}
+                  onChange={handleChangeType}
+                >
+                  <MenuItem value={3}>Tất cả</MenuItem>
+                  <MenuItem value={0}>Sân 5</MenuItem>
+                  <MenuItem value={1}>Sân 7</MenuItem>
+                </Select>
+              </div>
+            )}
+
+
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Link to="/login" className="px-3 font-medium">
-                Login
-              </Link>
+              {!account ? (<Link to="/login" className="px-3 ">
+                <button className="text-lg">Đăng nhập</button>
+              </Link>) : <button className="text-lg" onClick={handleLogout}>Đăng xuất</button>}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton

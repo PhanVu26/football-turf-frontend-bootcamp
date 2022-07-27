@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import TurfService from "../../services/TurfService";
 import CardCustom from "./CardCustom"
 
-const Home = () => {
-  const [turfs, setTurfs] = useState([]);
-  useEffect(() => {
-    TurfService.getMainTurfs().then((response) => {
-      const { data } = response;
-      setTurfs(data);
-    });
-  }, []);
+const Home = ({turfs}) => {
+
 
   return (
     <div className="width-screen flex justify-center">

@@ -51,8 +51,6 @@ export default function TurfSchedule() {
     setStatus(calEvent.status)
   }, [])
 
-
-
   const handleChangeStatus = (event) => {
     setStatus(event.target.value)
   };
@@ -115,7 +113,7 @@ export default function TurfSchedule() {
           <DialogContentText>
             {selectedEvent.title}
           </DialogContentText>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <FormControl sx={{ m: 1, minWidth: 240 }} size="small">
             <InputLabel id="demo-select-small">Status</InputLabel>
             <Select
               labelId="demo-select-small"
@@ -132,7 +130,6 @@ export default function TurfSchedule() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleUpdate}>Update</Button>
-          <Button onClick={handleClose}>Delete</Button>
         </DialogActions>
       </Dialog>
       <Calendar

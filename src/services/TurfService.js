@@ -18,11 +18,16 @@ const getScheduleByTurfId = turfId => {
   return http.get(`/api/schedule/getScheduleInAMonth?turfId=${turfId}`);
 };
 
+const searchMainTurf = data => {
+  return http.post("/api/mainTurfs/searchMainTurf", data);
+};
+
 const TurfService = {
     getAll,
     login,
     getMainTurfs,
     getTurfsInMainTurf,
     getScheduleByTurfId,
+    searchMainTurf,
   };
   export default TurfService;
