@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  football_turf_frontend_bootcamp:
+    image: football_turf_frontend_bootcamp
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8083:8083
